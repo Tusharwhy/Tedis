@@ -1,0 +1,11 @@
+{
+  "name": "tedis",
+  "version": "1.0.0",
+  "description": "This is Tedis database.Just like redis",
+  "main": "./app/main.js",
+  "scripts": {
+    "start": "node ./app/main.js"
+  },
+  "author": "Tushar Rajora",
+  "license": "ISC"
+}
