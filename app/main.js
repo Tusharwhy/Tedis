@@ -1,18 +1,33 @@
 //main
 const net = require("net");
-
+const Parser = require("redis-parser");
 console.log("Initiated");
 
 const server = net.createServer((connection) => {
-  connection.write("Client connected to server\r\n");
-
   connection.on("data", (data) => {
-    const message = data.toString().trim();
-    console.log("message: ", message);
+    const Message = new Parser({
+      returnReply: (reply) => {
+        console.log(reply);
+        const command = reply[0];
+        console.log(command);
+        switch (command) {
+          case "ping":
+            {
+              connection.write("+PONG\r\n");
+            }
+            break;
+          case "echo": {
+            const message = reply[1];
 
-    if (message.includes("PING")) {
-      connection.write("+PONG\r\n");
-    }
+            connection.write(`$${message.length}\r\n${message}\r\n`);
+          }
+        }
+      },
+      returnError: (err) => {
+        console.log("=>", err);
+      },
+    });
+    Message.execute(data);
   });
 
   connection.on("end", () => {
@@ -20,6 +35,6 @@ const server = net.createServer((connection) => {
   });
 });
 
-server.listen(6379, "127.0.0.1", () => {
-  console.log("Tedis server is listening on port 6379");
+server.listen(8000, "127.0.0.1", () => {
+  console.log("Tedis server is listening on port 8000");
 });
