@@ -1,6 +1,7 @@
 //main
 const net = require("net");
 const Parser = require("redis-parser");
+const echoFunction = require("./utils");
 console.log("Initiated");
 
 const server = net.createServer((connection) => {
@@ -8,18 +9,19 @@ const server = net.createServer((connection) => {
     const Message = new Parser({
       returnReply: (reply) => {
         console.log(reply);
-        const command = reply[0];
+        const command = reply[0].toLowerCase();
         console.log(command);
         switch (command) {
+          //ping command
           case "ping":
             {
               connection.write("+PONG\r\n");
             }
             break;
+          //echo command
           case "echo": {
-            const message = reply[1];
-
-            connection.write(`$${message.length}\r\n${message}\r\n`);
+            const message = echoFunction(reply);
+            connection.write(message);
           }
         }
       },
