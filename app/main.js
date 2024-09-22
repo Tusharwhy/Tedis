@@ -1,7 +1,7 @@
 //main
 const net = require("net");
 const Parser = require("redis-parser");
-const echoFunction = require("./utils");
+const { echoFunction, setKeyValue, getKeyValue } = require("./utils");
 console.log("Initiated");
 
 const server = net.createServer((connection) => {
@@ -19,8 +19,22 @@ const server = net.createServer((connection) => {
             }
             break;
           //echo command
-          case "echo": {
-            const message = echoFunction(reply);
+          case "echo":
+            {
+              const message = echoFunction(reply);
+              connection.write(message);
+            }
+            break;
+          //set command
+          case "set":
+            {
+              const message = setKeyValue(reply);
+              connection.write(message);
+            }
+            break;
+          //get command
+          case "get": {
+            const message = getKeyValue(reply);
             connection.write(message);
           }
         }

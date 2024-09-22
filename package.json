@@ -4,11 +4,12 @@
   "description": "This is Tedis database.Just like redis",
   "main": "./app/main.js",
   "scripts": {
-    "start": "node ./app/main.js"
+    "start": "nodemon ./app/main.js"
   },
   "author": "Tushar Rajora",
   "license": "ISC",
   "dependencies": {
+    "nodemon": "^3.1.7",
     "redis-parser": "^3.0.0"
   }
 }
